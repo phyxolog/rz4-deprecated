@@ -2,6 +2,8 @@
 #define HELPER_H
 
 #include <iostream>
+#include <cmath>
+#include <string>
 #include <sstream>
 
 class Helper {

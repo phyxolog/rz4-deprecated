@@ -1,4 +1,4 @@
-CFLAGS = -std=c++11 -DUNIX -DBIT64 -D_FILE_OFFSET_BITS=64 -m64 -O3 -Wall -pthread
+CFLAGS = -std=c++17 -DUNIX -DBIT64 -D_FILE_OFFSET_BITS=64 -m64 -O3 -Wall -pthread
 
 PROG_NAME = dist/rz4
 PROG_SRC = rz4.cpp\

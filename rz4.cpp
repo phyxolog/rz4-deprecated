@@ -9,7 +9,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
   // Scanner *scanner = new Scanner("media.data", SCAN_BUFFER_SIZE);
-  std::string test = Helper::humn_size(151);
+  std::string test = Helper::humn_size(125);
   cout << test << endl;
   return 0;
 } 
