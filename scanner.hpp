@@ -12,8 +12,6 @@
 #include "boost/format.hpp"
 #include "helper.hpp"
 
-#define NO_OF_CHARS 256
-
 struct file_list {
   std::string file_type;
   std::string ext;
