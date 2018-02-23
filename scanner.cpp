@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Scanner::Scanner(std::string file_name, unsigned int buffer_size = 65536) : file_name(file_name), buffer_size(buffer_size) {
+Scanner::Scanner(std::string file_name, unsigned int buffer_size) : file_name(file_name), buffer_size(buffer_size) {
   file.open(file_name, std::fstream::binary);
   file.seekg(0, std::ios::end);
   file_size = file.tellg();
@@ -13,31 +13,43 @@ Scanner::Scanner(std::string file_name, unsigned int buffer_size = 65536) : file
   }
 }
 
-int linear_search(const char *buffer, unsigned int buffer_size, char needle, unsigned int start_index = 0) {
-  for (unsigned int i = start_index; i < buffer_size; i++) {
-    if (buffer[i] == needle) {
-      return i;
-    }
+int Scanner::search_char_in_buffer(const char *buffer, unsigned int buffer_size, char needle, unsigned int start_index) {
+  const char* result = (const char*)std::memchr(buffer + start_index, needle, buffer_size);
+  return result ? size_t(result - buffer) : -1;
+}
+
+bool Scanner::is_riff_wave_header(const char *header) {
+  if (header[0] == 0x52 && header[1] == 0x49 && header[2] == 0x46 && header[3] == 0x46
+      && header[8] == 0x57 && header[9] == 0x41 && header[10] == 0x56 && header[11] == 0x45) {
+    return true;
   }
 
-  return -1;
+  return false;
 }
 
 void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_offset) {
-  int index = linear_search(buffer, buffer_size, 'R');
+  wav_header *header;
+  const unsigned int bufsize = sizeof(wav_header);
   unsigned long long offset = -1;
-  char *buf = new char[12];
+  char *buf = new char[bufsize];
+
+  int index = search_char_in_buffer(buffer, buffer_size, 'R');
 
   while (index != -1) {
-    offset = current_offset + index;
-
-    file.seekg(offset, std::ios::beg);
-    file.read(buf, 12);
-    if (buf[0] == 0x52 && buf[1] == 0x49 && buf[2] == 0x46 && buf[3] == 0x46) {
-      cout << "Some found!" << endl;
+    if (index + bufsize <= buffer_size) {
+      std::memcpy(buf, buffer + index, bufsize);
+    } else {
+      offset = current_offset + index;
+      file.seekg(offset, std::ios::beg);
+      file.read(buf, bufsize);
     }
 
-    index = linear_search(buffer, buffer_size, 'R', index + 1);
+    if (is_riff_wave_header(buf)) {
+      header = (wav_header*)(buf);
+      cout << boost::str(boost::format("Found RIFF WAVE @ 0x%.8X (%s)") % (current_offset + index) % Helper::humn_size(header->wav_size + 8)) << endl;
+    }
+
+    index = search_char_in_buffer(buffer, buffer_size, 'R', index + 1);
   }
 
   delete[] buf;
@@ -66,7 +78,6 @@ bool Scanner::scan() {
     riff_wave_scanner(buffer, current_offset);
 
     read_bytes += buffer_size;
-    cout << read_bytes << " " << file_size << endl;
   }
 
   delete[] buffer;

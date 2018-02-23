@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include <string>
-#include <sstream>
+#include "boost/format.hpp"
 
 class Helper {
 public:
