@@ -7,6 +7,7 @@ Scanner::Scanner(std::string file_name, unsigned int buffer_size) : file_name(fi
   file.seekg(0, std::ios::end);
   file_size = file.tellg();
   file.seekg(0, std::ios::beg);
+  total_size = 0;
 
   if (file_size < buffer_size) {
     buffer_size = file_size;
@@ -35,7 +36,7 @@ void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_o
 
   int index = search_char_in_buffer(buffer, buffer_size, 'R');
 
-  while (index != -1) {
+  while (abs(index) <= buffer_size && index != -1) {
     if (index + bufsize <= buffer_size) {
       std::memcpy(buf, buffer + index, bufsize);
     } else {
@@ -46,7 +47,20 @@ void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_o
 
     if (is_riff_wave_header(buf)) {
       header = (wav_header*)(buf);
-      cout << boost::str(boost::format("Found RIFF WAVE @ 0x%.8X (%s)") % (current_offset + index) % Helper::humn_size(header->wav_size + 8)) << endl;
+      Sign sign;
+      sign.file_type = types[riff];
+      sign.ext = exts[riff];
+      sign.file_size = header->wav_size + 8;
+      sign.offset = current_offset + index;
+      sign.data = header;
+      total_size += sign.file_size;
+      offset_list.push_back(sign);
+
+      cout
+        << boost::format("--> Found RIFF WAVE @ 0x%.8X (%s)")
+          % (current_offset + index)
+          % (sign.file_size)
+        << endl;
     }
 
     index = search_char_in_buffer(buffer, buffer_size, 'R', index + 1);
@@ -74,11 +88,20 @@ bool Scanner::scan() {
     file.read(buffer, buffer_size);
     current_offset = read_bytes;
 
-    // run scanners
+    // // run scanners
     riff_wave_scanner(buffer, current_offset);
 
     read_bytes += buffer_size;
   }
 
   delete[] buffer;
+  return true;
+}
+
+unsigned long long Scanner::get_count_of_found_files() {
+  return offset_list.size();
+}
+
+unsigned long long Scanner::get_total_size() {
+  return total_size;
 }

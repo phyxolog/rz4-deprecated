@@ -12,13 +12,18 @@
 #include "boost/format.hpp"
 #include "helper.hpp"
 
-struct file_list {
+enum { riff = 0 };
+const char types[] = { "RIFF WAVE" };
+const char exts[] = { "wav" };
+
+typedef struct _Sign {
   std::string file_type;
   std::string ext;
   std::string short_type;
   size_t file_size;
   size_t offset;
-};
+  void *data;
+} Sign;
 
 typedef struct wav_header {
   char riff_header[4];
@@ -41,14 +46,18 @@ private:
   std::ifstream file;
   std::string file_name;
   unsigned int buffer_size;
-  unsigned long long int file_size;
-  unsigned long long int current_offset;
-  std::list<file_list> list;
+  unsigned long long file_size;
+  unsigned long long current_offset;
+  unsigned long long total_size;
+  std::list<Sign> offset_list;
 
   int search_char_in_buffer(const char*, unsigned int, char, unsigned int = 0);
 public:
   Scanner(std::string, unsigned int = 65536);
   bool scan();
+  unsigned long long get_count_of_found_files();
+  unsigned long long get_total_size();
+
   // scanners
   void riff_wave_scanner(const char*, unsigned long long);
   // scanner helpers
