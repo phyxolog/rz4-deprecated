@@ -108,3 +108,7 @@ unsigned long long Scanner::get_count_of_found_files() {
 unsigned long long Scanner::get_total_size() {
   return total_size;
 }
+
+Scanner::~Scanner() {
+  file.close();
+}

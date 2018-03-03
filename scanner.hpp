@@ -54,6 +54,7 @@ private:
   int search_char_in_buffer(const char*, unsigned int, char, unsigned int = 0);
 public:
   Scanner(std::string, unsigned int = 65536);
+  ~Scanner();
   bool scan();
   unsigned long long get_count_of_found_files();
   unsigned long long get_total_size();

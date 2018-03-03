@@ -26,5 +26,7 @@ int main(int argc, char *argv[]) {
       % Helper::humn_size(scanner->get_total_size())
     << endl;
 
+  delete scanner; // free memory
+
   return 0;
 }
