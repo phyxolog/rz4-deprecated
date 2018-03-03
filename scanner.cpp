@@ -49,6 +49,7 @@ void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_o
 
     if (is_riff_wave_header(buf)) {
       header = (wav_header*)(buf);
+
       Sign sign;
       sign.file_type = types[riff];
       sign.ext = exts[riff];
@@ -56,7 +57,7 @@ void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_o
       sign.offset = current_offset + index;
       sign.data = header;
       total_size += sign.file_size;
-      offset_list.push_back(sign);
+      offset_list.push_front(sign);
 
       cout
         << boost::format("--> Found RIFF WAVE @ 0x%.8X (%s)")
