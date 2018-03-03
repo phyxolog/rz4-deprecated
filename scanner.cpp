@@ -37,7 +37,7 @@ void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_o
 
   int index = search_char_in_buffer(buffer, buffer_size, 'R');
 
-  while (abs(index) <= buffer_size && index != -1) {
+  while (index != -1 && (uint)index <= buffer_size) {
     if (index + bufsize <= buffer_size) {
       std::memcpy(buf, buffer + index, bufsize);
     } else {
