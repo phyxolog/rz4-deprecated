@@ -33,6 +33,7 @@ void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_o
   const unsigned int bufsize = sizeof(wav_header);
   unsigned long long offset = -1;
   char *buf = new char[bufsize];
+  bool change_pos = false;
 
   int index = search_char_in_buffer(buffer, buffer_size, 'R');
 
@@ -43,6 +44,7 @@ void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_o
       offset = current_offset + index;
       file.seekg(offset, std::ios::beg);
       file.read(buf, bufsize);
+      change_pos = true;
     }
 
     if (is_riff_wave_header(buf)) {
@@ -67,7 +69,8 @@ void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_o
   }
 
   delete[] buf;
-  file.seekg(current_offset + buffer_size, std::ios::beg);
+  if (change_pos)
+    file.seekg(current_offset + buffer_size, std::ios::beg);
 }
 
 bool Scanner::scan() {
@@ -88,7 +91,7 @@ bool Scanner::scan() {
     file.read(buffer, buffer_size);
     current_offset = read_bytes;
 
-    // // run scanners
+    // run scanners
     riff_wave_scanner(buffer, current_offset);
 
     read_bytes += buffer_size;
