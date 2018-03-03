@@ -59,7 +59,7 @@ void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_o
       cout
         << boost::format("--> Found RIFF WAVE @ 0x%.8X (%s)")
           % (current_offset + index)
-          % (sign.file_size)
+          % Helper::humn_size(sign.file_size)
         << endl;
     }
 
