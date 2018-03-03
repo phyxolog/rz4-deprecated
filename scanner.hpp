@@ -11,10 +11,7 @@
 
 #include "boost/format.hpp"
 #include "helper.hpp"
-
-enum { riff = 0 };
-const char types[] = { "RIFF WAVE" };
-const char exts[] = { "wav" };
+#include "types.hpp"
 
 typedef struct _Sign {
   std::string file_type;
