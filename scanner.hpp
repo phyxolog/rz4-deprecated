@@ -1,3 +1,5 @@
+// Copyright (c) 2018 Yura Zhivaga. All rights reserved.
+
 #ifndef SCANNER_H
 #define SCANNER_H
 
@@ -13,7 +15,9 @@
 #include "helper.hpp"
 #include "types.hpp"
 
-typedef struct _Sign {
+// structure of found signatures
+// in `data` field save header or null
+typedef struct Sign {
   std::string file_type;
   std::string ext;
   std::string short_type;
@@ -22,10 +26,11 @@ typedef struct _Sign {
   void *data;
 } Sign;
 
+// struct of RIFF WAVE format
 typedef struct wav_header {
-  char riff_header[4];
-  int wav_size;
-  char wave_header[4];
+  char riff_header[4]; // `RIFF`
+  int wav_size; // file_size = `wav_size` + 8
+  char wave_header[4]; // `WAVE`
   char fmt_header[4];
   int fmt_chunk_size;
   short audio_format;
@@ -58,6 +63,7 @@ public:
 
   // scanners
   void riff_wave_scanner(const char*, unsigned long long);
+
   // scanner helpers
   bool is_riff_wave_header(const char*);
 };

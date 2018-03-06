@@ -14,6 +14,8 @@ Scanner::Scanner(std::string file_name, unsigned int buffer_size) : file_name(fi
   }
 }
 
+// if found - return index
+// else return -1
 int Scanner::search_char_in_buffer(const char *buffer, unsigned int buffer_size, char needle, unsigned int start_index) {
   const char* result = (const char*)std::memchr(buffer + start_index, needle, buffer_size);
   return result ? size_t(result - buffer) : -1;

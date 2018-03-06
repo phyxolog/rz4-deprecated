@@ -6,7 +6,8 @@ compressor.cpp\
 injector.cpp\
 helper.cpp\
 scanner.cpp\
-extractor.cpp
+extractor.cpp\
+types.cpp
 
 .PHONY: all clean
 
