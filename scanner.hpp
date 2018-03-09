@@ -11,7 +11,9 @@
 #include <cstring>
 #include <list>
 
+#include "boost/filesystem.hpp"
 #include "boost/format.hpp"
+
 #include "helper.hpp"
 #include "types.hpp"
 
@@ -47,22 +49,24 @@ class Scanner {
 private:
   std::ifstream file;
   std::string file_name;
-  unsigned int buffer_size;
-  unsigned long long file_size;
-  unsigned long long current_offset;
-  unsigned long long total_size;
+  uint buffer_size;
+  uintmax_t file_size;
+  uintmax_t current_offset;
+  uintmax_t total_size;
   std::list<Sign> offset_list;
 
-  int search_char_in_buffer(const char*, unsigned int, char, unsigned int = 0);
+  int search_char_in_buffer(const char*, uint, char, uint = 0);
 public:
-  Scanner(std::string, unsigned int = 65536);
+  Scanner(std::string, uint = 65536);
   ~Scanner();
   bool scan();
-  unsigned long long get_count_of_found_files();
-  unsigned long long get_total_size();
+  std::list<Sign> get_offset_list();
+  void close();
+  uintmax_t get_count_of_found_files();
+  uintmax_t get_total_size();
 
   // scanners
-  void riff_wave_scanner(const char*, unsigned long long);
+  void riff_wave_scanner(const char*, uintmax_t);
 
   // scanner helpers
   bool is_riff_wave_header(const char*);

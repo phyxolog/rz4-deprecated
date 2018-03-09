@@ -4,18 +4,20 @@
 #include <string>
 #include <fstream>
 
+#include "boost/filesystem.hpp"
+
 class Extractor {
 private:
   std::ifstream file;
   std::string file_name;
-  unsigned int buffer_size;
-  unsigned long long file_size;
+  uint buffer_size;
+  uintmax_t file_size;
 
 public:
-  Extractor(std::string, unsigned int = 65536);
+  Extractor(std::string, uint = 65536);
   ~Extractor();
 
-  bool extract(unsigned long long, unsigned long long, std::string);
+  bool extract(uintmax_t, uintmax_t, std::string);
 };
 
 #endif

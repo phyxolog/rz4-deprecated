@@ -1,12 +1,11 @@
 #include "scanner.hpp"
 
 using namespace std;
+namespace fs = boost::filesystem;
 
-Scanner::Scanner(std::string file_name, unsigned int buffer_size) : file_name(file_name), buffer_size(buffer_size) {
+Scanner::Scanner(std::string file_name, uint buffer_size) : file_name(file_name), buffer_size(buffer_size) {
   file.open(file_name, std::fstream::binary);
-  file.seekg(0, std::ios::end);
-  file_size = file.tellg();
-  file.seekg(0, std::ios::beg);
+  file_size = fs::file_size(file_name);
   total_size = 0;
 
   if (file_size < buffer_size) {
@@ -16,9 +15,18 @@ Scanner::Scanner(std::string file_name, unsigned int buffer_size) : file_name(fi
 
 // if found - return index
 // else return -1
-int Scanner::search_char_in_buffer(const char *buffer, unsigned int buffer_size, char needle, unsigned int start_index) {
-  const char* result = (const char*)std::memchr(buffer + start_index, needle, buffer_size);
-  return result ? size_t(result - buffer) : -1;
+int Scanner::search_char_in_buffer(const char *buffer, uint buffer_size, char needle, uint start_index) {
+  if (start_index > buffer_size) {
+    return -1;
+  }
+
+  for (uint i = start_index; i < buffer_size; i++) {
+    if (buffer[i] == needle) {
+      return i;
+    }
+  }
+
+  return -1;
 }
 
 bool Scanner::is_riff_wave_header(const char *header) {
@@ -30,10 +38,9 @@ bool Scanner::is_riff_wave_header(const char *header) {
   return false;
 }
 
-void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_offset) {
+void Scanner::riff_wave_scanner(const char *buffer, uintmax_t current_offset) {
   wav_header *header;
-  const unsigned int bufsize = sizeof(wav_header);
-  unsigned long long offset = -1;
+  const uint bufsize = sizeof(wav_header);
   char *buf = new char[bufsize];
   bool change_pos = false;
 
@@ -43,8 +50,7 @@ void Scanner::riff_wave_scanner(const char *buffer, unsigned long long current_o
     if (index + bufsize <= buffer_size) {
       std::memcpy(buf, buffer + index, bufsize);
     } else {
-      offset = current_offset + index;
-      file.seekg(offset, std::ios::beg);
+      file.seekg(current_offset + index, std::ios::beg);
       file.read(buf, bufsize);
       change_pos = true;
     }
@@ -81,7 +87,7 @@ bool Scanner::scan() {
     return false;
   }
 
-  unsigned long long read_bytes = 0, current_offset = 0;
+  uintmax_t read_bytes = 0, current_offset = 0;
   char *buffer = new char[buffer_size];
 
   while (read_bytes < file_size) {
@@ -104,12 +110,22 @@ bool Scanner::scan() {
   return true;
 }
 
-unsigned long long Scanner::get_count_of_found_files() {
+uintmax_t Scanner::get_count_of_found_files() {
   return offset_list.size();
 }
 
-unsigned long long Scanner::get_total_size() {
+uintmax_t Scanner::get_total_size() {
   return total_size;
+}
+
+std::list<Sign> Scanner::get_offset_list() {
+  return offset_list;
+}
+
+void Scanner::close() {
+  if (file.is_open()) {
+    file.close();
+  }
 }
 
 Scanner::~Scanner() {
