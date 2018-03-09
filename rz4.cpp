@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
         % Helper::humn_size(scanner->get_total_size())
       << endl;
 
-    cout << endl << "[!] Scanning duration: " << duration.count() << "ms" << endl;
+    cout << endl << "[!] Scanning duration: " << Helper::pretty_time(duration.count()) << endl;
   }
   
   if (command.compare(OPTION_EXTRACT) == 0) {
@@ -132,7 +132,7 @@ int main(int argc, char *argv[]) {
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
-    cout << "[!] Extracting duration: " << duration.count() << "ms" << endl;
+    cout << "[!] Extracting duration: " << Helper::pretty_time(duration.count()) << endl;
   }
 
   return 0;

@@ -25,3 +25,20 @@ std::string Helper::generate_temp_file_name(const std::string& path) {
 
   return full_path.string();
 }
+
+// nice time output, input t in ms
+// 2^32 ms maximum, so will display incorrect negative values after about 49 days
+// copy-pasted from https://github.com/schnaader/precomp-cpp/blob/master/precomp.cpp#L9613
+std::string Helper::pretty_time(long long t) {
+  if (t < 1000) {
+    return boost::str(boost::format("%lims") % (long)t);
+  } else if (t < 1000*60) {
+    return boost::str(boost::format("%li second(s), %lims") % (long)(t / 1000) % (long)(t % 1000));
+  } else if (t < 1000*60*60) {
+    return boost::str(boost::format("%li minute(s), %li second(s)") % (long)(t / (1000 * 60)) % (long)((t / 1000) % 60));
+  } else if (t < 1000*60*60*24) {
+    return boost::str(boost::format("%li hour(s), %li minute(s), %li second(s)") % (long)(t / (1000*60*60)) % (long)((t / (1000*60)) % 60) % (long)((t / 1000) % 60));
+  } else {
+    return boost::str(boost::format("%li day(s), %li hour(s), %li minute(s)") % (long)(t / (1000*60*60*24)) % (long)((t / (1000*60*60)) % 24) % (long)((t / (1000*60)) % 60));    
+  }
+}
