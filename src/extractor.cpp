@@ -51,3 +51,9 @@ bool Extractor::extract(uintmax_t offset, uintmax_t size, std::string out_file_n
 Extractor::~Extractor() {
   file.close();
 }
+
+void Extractor::close() {
+  if (file.is_open()) {
+    file.close();
+  }
+}

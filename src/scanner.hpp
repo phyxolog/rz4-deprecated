@@ -17,6 +17,10 @@
 #include "helper.hpp"
 #include "types.hpp"
 
+typedef struct ScanParams {
+  bool enable_wav;
+} ScanParams;
+
 // structure of found signatures
 // in `data` field save header or null
 typedef struct Sign {
@@ -54,10 +58,11 @@ private:
   uintmax_t current_offset;
   uintmax_t total_size;
   std::list<Sign> offset_list;
+  ScanParams params;
 
   int search_char_in_buffer(const char*, uint, char, uint = 0);
 public:
-  Scanner(std::string, uint = 65536);
+  Scanner(std::string, ScanParams, uint = 65536);
   ~Scanner();
   bool scan();
   std::list<Sign> get_offset_list();

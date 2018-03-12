@@ -3,7 +3,9 @@
 using namespace std;
 namespace fs = boost::filesystem;
 
-Scanner::Scanner(std::string file_name, uint buffer_size) : file_name(file_name), buffer_size(buffer_size) {
+Scanner::Scanner(std::string file_name, ScanParams params, uint buffer_size) :
+  file_name(file_name), buffer_size(buffer_size), params(params) {
+  //
   file.open(file_name, std::fstream::binary);
   file_size = fs::file_size(file_name);
   total_size = 0;
@@ -87,7 +89,7 @@ bool Scanner::scan() {
     return false;
   }
 
-  uintmax_t read_bytes = 0, current_offset = 0;
+  uintmax_t read_bytes = 0;
   char *buffer = new char[buffer_size];
 
   while (read_bytes < file_size) {
@@ -98,10 +100,9 @@ bool Scanner::scan() {
     }
 
     file.read(buffer, buffer_size);
-    current_offset = read_bytes;
 
     // run scanners
-    riff_wave_scanner(buffer, current_offset);
+    if (params.enable_wav) riff_wave_scanner(buffer, read_bytes);
 
     read_bytes += buffer_size;
   }

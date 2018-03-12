@@ -18,6 +18,7 @@ public:
   ~Extractor();
 
   bool extract(uintmax_t, uintmax_t, std::string);
+  void close();
 };
 
 #endif

@@ -3,6 +3,7 @@
 namespace fs = boost::filesystem;
 
 std::string Helper::humn_size(uintmax_t bytes) {
+  if (bytes == 0) return "0 B";
   int exp = (int)(log(bytes) / log(1024));
   std::string prefix = std::string("BKMGTPE").substr(exp, 1) + (exp == 0 ? "" : "b");
   return boost::str(boost::format("%.2f %s") % (bytes / pow(1024, exp)) % prefix);

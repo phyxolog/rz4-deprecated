@@ -10,7 +10,7 @@
 ***
 ## [License](#license)
 
-MSC is provided under the MIT License.
+rz4 is provided under the MIT License.
 
 ```text
 The MIT License (MIT)

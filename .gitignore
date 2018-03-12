@@ -1,3 +1,4 @@
 .vscode
 *.data
-dist
+build
+media.data*
