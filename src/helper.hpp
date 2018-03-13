@@ -14,6 +14,7 @@ public:
   static std::string humn_size(uintmax_t);
   static std::string generate_temp_file_name(const std::string&);
   static std::string pretty_time(long long);
+  static uintmax_t memtoll(const char*);
 };
 
 #endif

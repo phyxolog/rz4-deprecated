@@ -21,7 +21,7 @@ typedef struct ScanParams {
   bool enable_wav;
 } ScanParams;
 
-// structure of found signatures
+// struct of found signatures
 // in `data` field save header or null
 typedef struct Sign {
   std::string file_type;

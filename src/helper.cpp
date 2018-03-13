@@ -43,3 +43,59 @@ std::string Helper::pretty_time(long long t) {
     return boost::str(boost::format("%li day(s), %li hour(s), %li minute(s)") % (long)(t / (1000*60*60*24)) % (long)((t / (1000*60*60)) % 24) % (long)((t / (1000*60)) % 60));    
   }
 }
+
+// copy-pasted from https://github.com/antirez/redis/blob/398b2084af067ae4d669e0ce5a63d3bc89c639d3/src/util.c#L180
+/* Convert a string representing an amount of memory into the number of
+ * bytes, so for instance memtoll("1Gb") will return 1073741824 that is
+ * (1024*1024*1024).
+ *
+ * On parsing error, if *err is not NULL, it's set to 1, otherwise it's
+ * set to 0. On error the function return value is 0, regardless of the
+ * fact 'err' is NULL or not. */
+uintmax_t Helper::memtoll(const char *p) {
+  const char *u;
+  char buf[128];
+  long mul; /* unit multiplier */
+  long long val;
+  unsigned int digits;
+
+  /* Search the first non digit character. */
+  u = p;
+  if (*u == '-') u++;
+  while(*u && isdigit(*u)) u++;
+  if (*u == '\0' || !strcasecmp(u,"b")) {
+      mul = 1;
+  } else if (!strcasecmp(u,"k")) {
+      mul = 1000;
+  } else if (!strcasecmp(u,"kb")) {
+      mul = 1024;
+  } else if (!strcasecmp(u,"m")) {
+      mul = 1000*1000;
+  } else if (!strcasecmp(u,"mb")) {
+      mul = 1024*1024;
+  } else if (!strcasecmp(u,"g")) {
+      mul = 1000L*1000*1000;
+  } else if (!strcasecmp(u,"gb")) {
+      mul = 1024L*1024*1024;
+  } else {
+    return 0;
+  }
+
+  /* Copy the digits into a buffer, we'll use strtoll() to convert
+    * the digit (without the unit) into a number. */
+  digits = u-p;
+  if (digits >= sizeof(buf)) {
+    return 0;
+  }
+  memcpy(buf,p,digits);
+  buf[digits] = '\0';
+
+  char *endptr;
+  errno = 0;
+  val = strtoll(buf,&endptr,10);
+  if ((val == 0 && errno == EINVAL) || *endptr != '\0') {
+    return 0;
+  }
+
+  return val*mul;
+}

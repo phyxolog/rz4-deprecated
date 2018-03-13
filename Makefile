@@ -1,6 +1,6 @@
 CFLAGS = -std=c++17 -DUNIX -DBIT64 -D_FILE_OFFSET_BITS=64 -m64 -O3 -Wall
 
-BOOST_L = -lboost_system -lboost_program_options -lboost_filesystem
+BOOST_L = -lboost_system -lboost_filesystem
 
 PROG_NAME = build/rz4
 PROG_SRC = src/rz4.cpp\
@@ -9,8 +9,7 @@ src/injector.cpp\
 src/helper.cpp\
 src/scanner.cpp\
 src/extractor.cpp\
-src/types.cpp\
-src/args.cpp
+src/types.cpp
 
 .PHONY: all clean
 
