@@ -55,8 +55,8 @@ static const std::string usage_message =
 "      s - only scan input file.\n"
 "      e - extract found signatures from input file.\n\n"
 "    Detect options:\n"
-"      --wav=N     - enable RIFF WAVE detect (default: 1).\n\n"
+"      --wav=N          - enable RIFF WAVE detect (default: 1).\n\n"
 "    Other options:\n"
 "      --out=<filename> - path to output file name\n"
-"      --outdir=<path> - path to output folder (for extracted files)\n"
-"      --bufsize=N - set buffer size (default: 256kb).\n\n";
+"      --outdir=<path>  - path to output folder (for extracted files)\n"
+"      --bufsize=N      - set buffer size (default: 256kb).\n\n";
