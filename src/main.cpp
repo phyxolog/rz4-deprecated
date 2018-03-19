@@ -111,13 +111,15 @@ int main(int argc, char *argv[]) {
     std::list<stream_info> stream_list(scanner->get_stream_list());
 
     uintmax_t i = 1, count = scanner->c_found_files();
-    for (std::list<stream_info>::const_iterator iterator = stream_list.begin(), end = stream_list.end(); iterator != end; iterator++, i++) {
-      const fs::path path = options.outdir / boost::str(boost::format("%.8X-%.8X.%s")
-                                            % (*iterator).offset
-                                            % (*iterator).file_size
-                                            % (*iterator).ext);
+    std::list<stream_info>::const_iterator iter, end; 
+    
+    for (iter = stream_list.begin(), end = stream_list.end(); iter != end; iter++, i++) {
+      const fs::path path = options.outdir / boost::str(boost::format("%08X-%08X.%s")
+                                            % (*iter).offset
+                                            % (*iter).file_size
+                                            % (*iter).ext);
 
-      ejector->extract((*iterator).offset, (*iterator).file_size, path.string());
+      ejector->extract((*iter).offset, (*iter).file_size, path.string());
       std::cout << "\r" << "-> " << i * 100 / count << "% completed.";
     }
 
