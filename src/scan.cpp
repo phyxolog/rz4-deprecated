@@ -53,12 +53,7 @@ bool Scan::run() {
 }
 
 bool Scan::is_riff_header(const char *header) {
-  if (header[0] == 0x52 && header[1] == 0x49 && header[2] == 0x46 && header[3] == 0x46
-      && header[8] == 0x57 && header[9] == 0x41 && header[10] == 0x56 && header[11] == 0x45) {
-    return true;
-  }
-
-  return false;
+  return memcmp(header, "RIFF", 4) == 0 && memcmp(header + 8, "WAVE", 4) == 0;
 }
 
 void Scan::riff_match(const char *buffer, uintmax_t current_offset) {

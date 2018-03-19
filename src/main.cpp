@@ -27,7 +27,11 @@ int main(int argc, char *argv[]) {
   scan_opts scan_opts;
   scan_opts.enable_wav = 1;
 
-  Scan *scanner;
+  // input file always the last arg
+  options.infile = argv[argc - 1];
+
+  Scan  *scanner;
+  Eject *ejector;
 
   int opt = 0;
 
@@ -39,10 +43,6 @@ int main(int argc, char *argv[]) {
 
       case 'h':
         return usage();
-
-      case 'i':
-        options.infile = optarg;
-        break;
 
       case 'o':
         options.outfile = optarg;
@@ -83,16 +83,15 @@ int main(int argc, char *argv[]) {
     fs::create_directory(options.outdir);
   }
 
-  scan_opts.buffer_size = options.buffer_size;
-
   cout << "-> Buffer size: " << humnsize(options.buffer_size) << endl;
 
+  scan_opts.buffer_size = options.buffer_size;
   scanner = new Scan(options.infile, scan_opts);
   
   if (options.command.compare(COMMAND_SCAN) == 0
       || options.command.compare(COMMAND_COMPRESS) == 0
       || options.command.compare(COMMAND_EXTRACT) == 0) {
-    cout << "-> Run scanner..." << endl << endl;
+    cout << "-> Scanning..." << endl << endl;
 
     scanner->run();
     scanner->close();
@@ -102,6 +101,28 @@ int main(int argc, char *argv[]) {
         % scanner->c_found_files()
         % humnsize(scanner->get_total_size())
       << endl;
+  }
+
+  if (options.command.compare(COMMAND_EXTRACT) == 0) {
+    cout << endl << "-> Extract data..." << endl;
+
+    ejector = new Eject(options.infile, options.buffer_size);
+    std::list<stream_info> stream_list(scanner->get_stream_list());
+
+    uintmax_t i = 1, count = scanner->c_found_files();
+    for (std::list<stream_info>::const_iterator iterator = stream_list.begin(), end = stream_list.end(); iterator != end; iterator++, i++) {
+      const fs::path path = options.outdir / boost::str(boost::format("%.8X-%.8X.%s")
+                                            % (*iterator).offset
+                                            % (*iterator).file_size
+                                            % (*iterator).ext);
+
+      ejector->extract((*iterator).offset, (*iterator).file_size, path.string());
+      std::cout << "\r" << "-> " << i * 100 / count << "% completed.";
+    }
+
+    ejector->close();
+
+    cout << endl << "-> Extracting successfully!" << endl;
   }
 
   return 0;

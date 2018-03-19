@@ -6,6 +6,7 @@ PROG_NAME = build/rz4
 PROG_SRC = src/main.cpp\
 src/util.cpp\
 src/scan.cpp\
+src/eject.cpp\
 src/types.cpp
 
 .PHONY: all clean

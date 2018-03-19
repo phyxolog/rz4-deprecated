@@ -8,13 +8,14 @@
 #include "boost/format.hpp"
 
 #include "scan.hpp"
+#include "eject.hpp"
 #include "util.hpp"
 
-#define BUFFER_SIZE 262144
-
-#define COMMAND_SCAN "s"
-#define COMMAND_COMPRESS "c"
-#define COMMAND_EXTRACT "e"
+#define DEBUG             TRUE
+#define BUFFER_SIZE       262144
+#define COMMAND_SCAN      "s"
+#define COMMAND_COMPRESS  "c"
+#define COMMAND_EXTRACT   "e"
 
 #define see_help "See --help for usage information.\n"
 
@@ -32,8 +33,7 @@ const struct option long_options[] = {
   {"scan",     no_argument,       0, 's' },
   {"help",     no_argument,       0, 'h' },
   {"wav",      required_argument, 0, 'w' },
-  {"input",    required_argument, 0, 'i' },
-  {"output",   required_argument, 0, 'o' },
+  {"out",      required_argument, 0, 'o' },
   {"outdir",   required_argument, 0, 'd' },
   {"bufsize",  required_argument, 0, 'b' },
 	{0,          0,                 0,  0  }
@@ -48,7 +48,7 @@ static const std::string logo =
 
 static const std::string usage_message =
 "Usage:\n"
-"    rz4 <command> [options] --input=input_file [--output=output_file] [--outdir=output_dir]\n\n"
+"    rz4 <command> [options] <input_file>\n\n"
 "    Commands:\n"
 "      c - compress input file.\n"
 "      s - only scan input file.\n"
@@ -56,4 +56,6 @@ static const std::string usage_message =
 "    Detect options:\n"
 "      --wav=N     - enable RIFF WAVE detect (default: 1).\n\n"
 "    Other options:\n"
+"      --out=<filename> - path to output file name\n"
+"      --outdir=<path> - path to output folder (for extracted files)\n"
 "      --bufsize=N - set buffer size (default: 256kb).\n\n";
