@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <chrono>
+#include <algorithm>
 
 #include <getopt.h>
 

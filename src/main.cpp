@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
 
   // `command` always the first argument
   std::string command = argv[1];
+  std::transform(command.begin(), command.end(), command.begin(), ::tolower);
 
   // init options
   Options options;
