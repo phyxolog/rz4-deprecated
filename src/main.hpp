@@ -37,7 +37,7 @@ const struct option long_options[] = {
   {"out",      required_argument, 0, 'o' },
   {"outdir",   required_argument, 0, 'd' },
   {"bufsize",  required_argument, 0, 'b' },
-	{0,          0,                 0,  0  }
+  {0,          0,                 0,  0  }
 };
 
 static const std::string logo =
