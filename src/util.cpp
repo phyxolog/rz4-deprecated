@@ -117,17 +117,12 @@ uintmax_t memtoll(const char *p) {
 
 // if found - return index
 // else return -1
-// TODO: Rewrite
-int charmatch(const char *buffer, uint buffer_size, char needle, uint start_index) {
-  if (start_index > buffer_size) {
+int charmatch(const char *buffer, uint buffer_size, char needle, uint offset) {
+  if (offset > buffer_size) {
     return -1;
   }
 
-  for (uint i = start_index; i < buffer_size; i++) {
-    if (buffer[i] == needle) {
-      return i;
-    }
-  }
-
-  return -1;
+  buffer_size -= offset;
+  const char* result = (const char*)std::memchr(buffer + offset, needle, buffer_size);
+  return result ? size_t(result - buffer) : -1;
 }

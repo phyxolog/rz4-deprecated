@@ -8,7 +8,6 @@
 
 #include "boost/format.hpp"
 #include "boost/filesystem.hpp"
-#include "boost/thread.hpp"
 
 // struct of found signatures
 // in `data` field save header or null
