@@ -5,6 +5,8 @@
 #include <cmath>
 #include <string>
 #include <fstream>
+#include <map>
+#include <algorithm>
 
 #include "boost/format.hpp"
 #include "boost/filesystem.hpp"
@@ -23,7 +25,7 @@ typedef struct stream_info {
 std::string humnsize(uintmax_t);
 std::string tmpfile(const std::string&);
 std::string prettytime(long long);
-uintmax_t memtoll(const char*);
+uintmax_t memtoll(std::string);
 int charmatch(const char*, uint, char, uint = 0);
 
 #endif
