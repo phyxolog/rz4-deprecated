@@ -118,7 +118,7 @@ uintmax_t memtoll(const char *p) {
 // if found - return index
 // else return -1
 int charmatch(const char *buffer, uint buffer_size, char needle, uint offset) {
-  if (offset > buffer_size) {
+  if (offset >= buffer_size) {
     return -1;
   }
 
