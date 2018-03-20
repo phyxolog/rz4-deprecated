@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2018 Yura Zhivaga <yzhivaga@gmail.com>
+ * 
+ * This file is part of rz4.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "util.hpp"
 
 using namespace std; // remove this after tests
@@ -67,7 +86,7 @@ uintmax_t memtoll(std::string str) {
   std::string u = str.substr(nondigit_pos, str.length());
   std::transform(u.begin(), u.end(), u.begin(), ::tolower);
 
-  std::map <std::string, long> umul = {
+  std::map<std::string, long> umul = {
     { "b",  1                   },
     { "k",  1000                },
     { "kb", 1024                },
