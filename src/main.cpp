@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
     std::list<stream_info>::const_iterator iter, end; 
     
     for (iter = stream_list.begin(), end = stream_list.end(); iter != end; iter++, i++) {
-      const fs::path path = options.outdir / boost::str(boost::format("%08X-%08X.%s")
+      const fs::path path = options.outdir / boost::str(boost::format("%016X-%016X.%s")
                                             % (*iter).offset
                                             % (*iter).file_size
                                             % (*iter).ext);
@@ -159,7 +159,9 @@ static int usage() {
   return 1;
 }
 
-// generate name with prefixes
+/*
+* Generate file name with prefixes
+*/
 static std::string gennamep(std::string prefix1, std::string prefix2) {
   return string(prefix1 + prefix2 + to_string(chrono::seconds(std::time(NULL)).count()));
 }

@@ -105,7 +105,7 @@ void Scan::riff_match(const char *buffer, uintmax_t current_offset) {
       stream_list.push_front(si);
 
       cout
-        << boost::format("--> Found RIFF WAVE @ 0x%.8X (%s)")
+        << boost::format("--> Found RIFF WAVE @ 0x%016X (%s)")
           % (current_offset + index)
           % humnsize(si.file_size)
         << endl;

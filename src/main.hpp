@@ -31,7 +31,6 @@
 #include "eject.hpp"
 #include "util.hpp"
 
-#define DEBUG             TRUE
 #define BUFFER_SIZE       262144
 #define COMMAND_SCAN      "s"
 #define COMMAND_COMPRESS  "c"

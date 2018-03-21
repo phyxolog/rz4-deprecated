@@ -80,11 +80,26 @@ std::string prettytime(long long time) {
 * (1024*1024*1024).
 */
 uintmax_t memtoll(std::string str) {
-  long mul = 0;
+  if (str.length() == 0) {
+    return 0;
+  }
+
   size_t nondigit_pos = str.find_first_not_of("0123456789");
+
+  if (nondigit_pos == std::string::npos) {
+    return std::stoll(str);
+  }
+
+  uintmax_t result = 0;
   std::string digits = str.substr(0, nondigit_pos);
   std::string u = str.substr(nondigit_pos, str.length());
   std::transform(u.begin(), u.end(), u.begin(), ::tolower);
+
+  if (digits.length() == 0) {
+    return result;
+  } else {
+    result = std::stoll(digits);
+  }
 
   std::map<std::string, long> umul = {
     { "b",  1                   },
@@ -96,17 +111,17 @@ uintmax_t memtoll(std::string str) {
     { "gb", 1024L * 1024 * 1024 },
   };
   
-  if (digits.length() == 0 || umul.find(u) == umul.end()) {
-    return 0;
+  auto mul = umul.find(u);
+  if (mul != umul.end()) {
+    return result * mul->second;
   } else {
-    mul = umul.at(u);
-    return std::stoll(digits) * mul;
+    return result;
   }
 }
 
 /*
 * Find char in array
-* if fouund - return index
+* if found - return index
 * else return -1
 */
 int charmatch(const char *buffer, uint buffer_size, char needle, uint offset) {
