@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
         break;
 
       default:
-        std::printf("%s\n", see_help);
+        cout << see_help << endl;
         return 1;
     }
   }

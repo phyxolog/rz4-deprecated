@@ -47,30 +47,49 @@ std::string tmpfile(const std::string& path) {
   return full_path.string();
 }
 
-// nice time output, input t in ms
-// 2^32 ms maximum, so will display incorrect negative values after about 49 days
-// copy-pasted from https://github.com/schnaader/precomp-cpp/blob/master/precomp.cpp#L9613
-std::string prettytime(long long time) {
-  long t = (long)time;
+/*
+* Convert ms to human-oriented time string
+*/
+std::string prettytime(uintmax_t time) {
+  const int size = 4;
+  int step = -1;
+  uintmax_t steps[size] = {
+    1000,
+    1000 * 60,
+    1000 * 60 * 60,
+    1000 * 60 * 60 * 24
+  };
 
-  if (t < 1000) {
-    return boost::str(boost::format("%lims") % t);
-  } else if (t < 1000 * 60) {
-    return boost::str(boost::format("%li second(s), %lims") % (t / 1000) % (t % 1000));
-  } else if (t < 1000 * 60 * 60) {
-    return boost::str(boost::format("%li minute(s), %li second(s)")
-                      % (t / (1000 * 60))
-                      % ((t / 1000) % 60));
-  } else if (t < 1000 * 60 * 60 * 24) {
-    return boost::str(boost::format("%li hour(s), %li minute(s), %li second(s)")
-                      % (t / (1000 * 60 * 60))
-                      % ((t / (1000 * 60)) % 60)
-                      % ((t / 1000) % 60));
-  } else {
-    return boost::str(boost::format("%li day(s), %li hour(s), %li minute(s)")
-                      % (t / (1000 * 60 * 60 * 24))
-                      % ((t / (1000 *60 * 60)) % 24)
-                      % ((t / (1000 * 60)) % 60));    
+  for (int i = 0; i < size; i++) {
+    if (time < steps[i]) {
+      step = i;
+      break;
+    }
+  }
+
+  switch (step) {
+    case 0:
+      return boost::str(boost::format("%lims") % time);
+      break;
+    case 1: // only ms
+      return boost::str(boost::format("%li second(s), %lims") % (time / 1000) % (time % 1000));
+      break;
+    case 2: // minutes
+      return boost::str(boost::format("%li minute(s), %li second(s)")
+                        % (time / (1000 * 60))
+                        % ((time / 1000) % 60));
+      break;
+    case 3: // hours
+      return boost::str(boost::format("%li hour(s), %li minute(s), %li second(s)")
+                        % (time / (1000 * 60 * 60))
+                        % ((time / (1000 * 60)) % 60)
+                        % ((time / 1000) % 60));
+      break;
+    default: // max (days)
+      return boost::str(boost::format("%li day(s), %li hour(s), %li minute(s)")
+                        % (time / (1000 * 60 * 60 * 24))
+                        % ((time / (1000 *60 * 60)) % 24)
+                        % ((time / (1000 * 60)) % 60));
   }
 }
 
@@ -105,8 +124,8 @@ uintmax_t memtoll(std::string str) {
     { "b",  1                   },
     { "k",  1000                },
     { "kb", 1024                },
-    { "m",  1000 * 1000         },
-    { "mb", 1024 * 1024         },
+    { "m",  1000  * 1000        },
+    { "mb", 1024  * 1024        },
     { "g",  1000L * 1000 * 1000 },
     { "gb", 1024L * 1024 * 1024 },
   };

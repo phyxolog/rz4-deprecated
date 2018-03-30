@@ -39,22 +39,46 @@ typedef struct scan_opts {
   bool enable_wav;
 } scan_opts;
 
-// struct of RIFF WAVE format
+/*
+* Struct of RIFF WAVE format
+*/
 typedef struct wav_header {
-  char riff_header[4]; // `RIFF`
-  int wav_size; // file_size = `wav_size` + 8
-  char wave_header[4]; // `WAVE`
-  char fmt_header[4];
-  int fmt_chunk_size;
+  char  riff_header[4]; /* RIFF */
+  int   wav_size;       /* File size = `wav_size` + 8 */
+  char  wave_header[4]; /* WAVE */
+  char  fmt_header[4];
+  int   fmt_chunk_size;
   short audio_format;
   short num_channels;
-  int sample_rate;
-  int byte_rate;
+  int   sample_rate;
+  int   byte_rate;
   short sample_alignment;
   short bit_depth; 
-  char data_header[4];
-  int data_bytes;
+  char  data_header[4];
+  int   data_bytes;
 } wav_header;
+
+/*
+* Struct of BITMAM format
+*/
+typedef struct bmp_header {
+	uint16_t magic;
+	uint32_t filesize;
+	uint16_t reserved1;
+	uint16_t reserved2;
+	uint32_t dataoffset;
+	uint32_t headersize;
+	int32_t  width;
+	int32_t  height;
+	uint16_t planes;
+	uint16_t bpp;
+	uint32_t compression;
+	uint32_t datasize;
+	uint32_t hres;
+	uint32_t vres;
+	uint32_t palettecolors;
+	uint32_t importantcolors;
+} bmp_header;
 
 class Scan {
 private:

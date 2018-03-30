@@ -43,7 +43,7 @@ typedef struct stream_info {
 
 std::string humnsize(uintmax_t);
 std::string tmpfile(const std::string&);
-std::string prettytime(long long);
+std::string prettytime(uintmax_t);
 uintmax_t memtoll(std::string);
 int charmatch(const char*, uint, char, uint = 0);
 
