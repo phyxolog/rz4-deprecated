@@ -35,8 +35,6 @@
 #define COMMAND_COMPRESS  "c"
 #define COMMAND_EXTRACT   "e"
 
-#define see_help "See --help for usage information.\n"
-
 typedef struct Options {
   boost::filesystem::path outdir;
   std::string command;

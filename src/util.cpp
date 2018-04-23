@@ -152,3 +152,10 @@ int charmatch(const char *buffer, uint buffer_size, char needle, uint offset) {
   const char* result = (const char*)std::memchr(buffer + offset, needle, buffer_size);
   return result ? size_t(result - buffer) : -1;
 }
+
+/*
+* Generate file name with prefixes
+*/
+std::string gennamep(std::string prefix1, std::string prefix2) {
+  return string(prefix1 + "_" + prefix2 + "_" + to_string(std::chrono::seconds(std::time(NULL)).count()));
+}

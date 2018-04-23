@@ -26,6 +26,7 @@
 #include <fstream>
 #include <map>
 #include <algorithm>
+#include <chrono>
 
 #include "boost/format.hpp"
 #include "boost/filesystem.hpp"
@@ -46,5 +47,6 @@ std::string tmpfile(const std::string&);
 std::string prettytime(uintmax_t);
 uintmax_t memtoll(std::string);
 int charmatch(const char*, uint, char, uint = 0);
+std::string gennamep(std::string, std::string);
 
 #endif

@@ -23,9 +23,10 @@ using namespace std;
 namespace fs = boost::filesystem;
 namespace po = boost::program_options;
 
-static std::string gennamep(std::string, std::string);
-static bool parse_bool(char*);
-static int usage();
+int usage() {
+  cout << logo << usage_message << endl;
+  return 1;
+}
 
 int main(int argc, char *argv[]) {
   if (argc < 3) {
@@ -100,7 +101,7 @@ int main(int argc, char *argv[]) {
 
   if (options.command == COMMAND_EXTRACT
       && options.outdir.empty()) {
-    options.outdir = workdir / gennamep(options.infile, "_extract_data_");
+    options.outdir = workdir / gennamep(options.infile, "extract_data");
   }
 
   if (options.command == COMMAND_EXTRACT
@@ -153,20 +154,4 @@ int main(int argc, char *argv[]) {
   }
 
   return 0;
-}
-
-static bool parse_bool(char *str) {
-  return (bool)atoi(str);
-}
-
-static int usage() {
-  cout << logo << usage_message << endl;
-  return 1;
-}
-
-/*
-* Generate file name with prefixes
-*/
-static std::string gennamep(std::string prefix1, std::string prefix2) {
-  return string(prefix1 + prefix2 + to_string(chrono::seconds(std::time(NULL)).count()));
 }
