@@ -22,10 +22,9 @@
 using namespace std;
 namespace fs = boost::filesystem;
 
-Scan::Scan(Options opts) : file_name(opts.infile), opts(opts) {
+Scan::Scan(Options opts) : file_name(opts.infile), buffer_size(opts.buffer_size), opts(opts) {
   infile.open(file_name, std::fstream::binary);
   file_size = fs::file_size(file_name);
-  buffer_size = opts.buffer_size;
 
   total_size = 0;
   if (file_size < buffer_size) {
