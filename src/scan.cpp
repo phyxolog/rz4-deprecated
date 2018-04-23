@@ -22,7 +22,7 @@
 using namespace std;
 namespace fs = boost::filesystem;
 
-Scan::Scan(std::string file_name, scan_opts opts) : file_name(file_name), opts(opts) {
+Scan::Scan(Options opts) : file_name(opts.infile), opts(opts) {
   infile.open(file_name, std::fstream::binary);
   file_size = fs::file_size(file_name);
   buffer_size = opts.buffer_size;
@@ -77,13 +77,13 @@ bool Scan::is_riff_header(const char *header) {
 
 void Scan::riff_match(const char *buffer, uintmax_t current_offset) {
   wav_header *header;
-  const uint bufsize = sizeof(wav_header);
+  const unsigned int bufsize = sizeof(wav_header);
   char *buf = new char[bufsize];
   bool change_pos = false;
 
   int index = charmatch(buffer, buffer_size, 'R');
 
-  while (index != -1 && (uint)index <= buffer_size) {
+  while (index != -1 && (unsigned int)index <= buffer_size) {
     if (index + bufsize <= buffer_size) {
       std::memcpy(buf, buffer + index, bufsize);
     } else {
@@ -95,7 +95,7 @@ void Scan::riff_match(const char *buffer, uintmax_t current_offset) {
     if (is_riff_header(buf)) {
       header = (wav_header*)(buf);
 
-      stream_info si;
+      StreamInfo si;
       si.file_type = types[riff];
       si.ext = exts[riff];
       si.file_size = header->wav_size + 8;
@@ -127,6 +127,6 @@ uintmax_t Scan::get_total_size() {
   return total_size;
 }
 
-std::list<stream_info> Scan::get_stream_list() {
+std::list<StreamInfo> Scan::get_stream_list() {
   return stream_list;
 }

@@ -35,14 +35,6 @@
 #define COMMAND_COMPRESS  "c"
 #define COMMAND_EXTRACT   "e"
 
-typedef struct Options {
-  boost::filesystem::path outdir;
-  std::string command;
-  std::string infile;
-  std::string outfile;
-  uint buffer_size;
-} Options;
-
 static const std::string logo =
 "----------------------------------------------------------\n"
 "|                           rz4                          |\n"

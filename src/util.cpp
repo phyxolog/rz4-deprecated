@@ -143,7 +143,7 @@ uintmax_t memtoll(std::string str) {
 * if found - return index
 * else return -1
 */
-int charmatch(const char *buffer, uint buffer_size, char needle, uint offset) {
+int charmatch(const char *buffer, unsigned int buffer_size, char needle, unsigned int offset) {
   if (offset >= buffer_size) {
     return -1;
   }

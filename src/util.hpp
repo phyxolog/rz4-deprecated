@@ -33,20 +33,29 @@
 
 // struct of found signatures
 // in `data` field save header or null
-typedef struct stream_info {
+typedef struct StreamInfo {
   std::string file_type;
   std::string ext;
   std::string short_type;
   size_t file_size;
   size_t offset;
   void *data;
-} stream_info;
+} StreamInfo;
+
+typedef struct Options {
+  boost::filesystem::path outdir;
+  std::string command;
+  std::string infile;
+  std::string outfile;
+  unsigned int buffer_size;
+  bool enable_wav;
+} Options;
 
 std::string humnsize(uintmax_t);
 std::string tmpfile(const std::string&);
 std::string prettytime(uintmax_t);
 uintmax_t memtoll(std::string);
-int charmatch(const char*, uint, char, uint = 0);
+int charmatch(const char*, unsigned int, char, unsigned int = 0);
 std::string gennamep(std::string, std::string);
 
 #endif

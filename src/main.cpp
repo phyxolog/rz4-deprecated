@@ -44,10 +44,7 @@ int main(int argc, char *argv[]) {
   Options options;
   options.command = command;
   options.buffer_size = BUFFER_SIZE;
-
-  // init default params for scanner
-  scan_opts scan_opts;
-  scan_opts.enable_wav = 1;
+  options.enable_wav = 1;
 
   // input file always the last arg
   options.infile = argv[argc - 1];
@@ -81,7 +78,7 @@ int main(int argc, char *argv[]) {
   }
 
   if (vm.count("wav")) {
-    scan_opts.enable_wav = vm["wav"].as<bool>();
+    options.enable_wav = vm["wav"].as<bool>();
   }
 
   if (vm.count("help")) {
@@ -111,8 +108,7 @@ int main(int argc, char *argv[]) {
 
   cout << "-> Buffer size: " << humnsize(options.buffer_size) << endl;
 
-  scan_opts.buffer_size = options.buffer_size;
-  scanner = new Scan(options.infile, scan_opts);
+  scanner = new Scan(options);
   
   if (options.command == COMMAND_SCAN
       || options.command == COMMAND_COMPRESS
@@ -133,10 +129,10 @@ int main(int argc, char *argv[]) {
     cout << endl << "-> Extract data..." << endl;
 
     ejector = new Eject(options.infile, options.buffer_size);
-    std::list<stream_info> stream_list(scanner->get_stream_list());
+    std::list<StreamInfo> stream_list(scanner->get_stream_list());
 
     uintmax_t i = 1, count = scanner->c_found_files();
-    std::list<stream_info>::const_iterator iter, end; 
+    std::list<StreamInfo>::const_iterator iter, end; 
     
     for (iter = stream_list.begin(), end = stream_list.end(); iter != end; iter++, i++) {
       const fs::path path = options.outdir / boost::str(boost::format("%016X-%016X.%s")

@@ -21,7 +21,7 @@
 
 namespace fs = boost::filesystem;
 
-Eject::Eject(std::string file_name, uint buffer_size) : file_name(file_name), buffer_size(buffer_size) {
+Eject::Eject(std::string file_name, unsigned int buffer_size) : file_name(file_name), buffer_size(buffer_size) {
   file.open(file_name, std::fstream::binary);
   file_size = fs::file_size(file_name);
 
