@@ -83,7 +83,7 @@ private:
   uintmax_t file_size;
   uintmax_t current_offset;
   uintmax_t total_size;
-  std::list<StreamInfo> stream_list;
+  std::list<StreamInfo> streamlist;
   Options opts;
 
 public:
@@ -91,7 +91,7 @@ public:
   ~Scan();
   bool run();
   void close();
-  std::list<StreamInfo> get_stream_list();
+  std::list<StreamInfo> get_streamlist();
   uintmax_t c_found_files();
   uintmax_t get_total_size();
 

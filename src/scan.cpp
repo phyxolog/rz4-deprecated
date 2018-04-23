@@ -101,7 +101,7 @@ void Scan::riff_match(const char *buffer, uintmax_t current_offset) {
       si.offset = current_offset + index;
       si.data = header;
       total_size += si.file_size;
-      stream_list.push_front(si);
+      streamlist.push_front(si);
 
       cout
         << boost::format("--> Found RIFF WAVE @ 0x%016X (%s)")
@@ -119,13 +119,13 @@ void Scan::riff_match(const char *buffer, uintmax_t current_offset) {
 }
 
 uintmax_t Scan::c_found_files() {
-  return stream_list.size();
+  return streamlist.size();
 }
 
 uintmax_t Scan::get_total_size() {
   return total_size;
 }
 
-std::list<StreamInfo> Scan::get_stream_list() {
-  return stream_list;
+std::list<StreamInfo> Scan::get_streamlist() {
+  return streamlist;
 }

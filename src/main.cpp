@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
     cout << endl << "-> Extract data..." << endl;
 
     ejector = new Eject(options.infile, options.buffer_size);
-    std::list<StreamInfo> stream_list(scanner->get_stream_list());
+    std::list<StreamInfo> stream_list(scanner->get_streamlist());
 
     uintmax_t i = 1, count = scanner->c_found_files();
     std::list<StreamInfo>::const_iterator iter, end; 
