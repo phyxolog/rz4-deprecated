@@ -21,6 +21,7 @@
 
 using namespace std;
 namespace fs = boost::filesystem;
+namespace po = boost::program_options;
 
 static std::string gennamep(std::string, std::string);
 static bool parse_bool(char*);
@@ -53,33 +54,37 @@ int main(int argc, char *argv[]) {
   Scan  *scanner;
   Eject *ejector;
 
-  int opt = 0;
+  po::options_description desc("");
+  desc.add_options()
+    ("help,h", "Show help")
+    ("wav,w", po::value<bool>())
+    ("out,o", po::value<std::string>())
+    ("outdir,d", po::value<std::string>())
+    ("bufsize,b", po::value<std::string>());
 
-  while ((opt = getopt_long(argc, argv, "w:h:i:o:d:b", long_options, NULL)) != -1) {
-    switch (opt) {
-      case 'w':
-        scan_opts.enable_wav = parse_bool(optarg);
-        break;
+  po::variables_map vm;
+  po::parsed_options parsed = po::command_line_parser(argc, argv).options(desc).allow_unregistered().run();
+  po::store(parsed, vm);
+  po::notify(vm);
 
-      case 'h':
-        return usage();
+  if (vm.count("out")) {
+    options.outfile = vm["out"].as<std::string>();
+  }
 
-      case 'o':
-        options.outfile = optarg;
-        break;
+  if (vm.count("outdir")) {
+    options.outdir = vm["outdir"].as<std::string>();
+  }
 
-      case 'd':
-        options.outdir = optarg;
-        break;
+  if (vm.count("bufsize")) {
+    options.buffer_size = memtoll(vm["bufsize"].as<std::string>());
+  }
 
-      case 'b':
-        options.buffer_size = memtoll(optarg);
-        break;
+  if (vm.count("wav")) {
+    scan_opts.enable_wav = vm["wav"].as<bool>();
+  }
 
-      default:
-        cout << see_help << endl;
-        return 1;
-    }
+  if (vm.count("help")) {
+    return usage();
   }
 
   cout << logo << endl;
@@ -108,9 +113,9 @@ int main(int argc, char *argv[]) {
   scan_opts.buffer_size = options.buffer_size;
   scanner = new Scan(options.infile, scan_opts);
   
-  if (options.command.compare(COMMAND_SCAN) == 0
-      || options.command.compare(COMMAND_COMPRESS) == 0
-      || options.command.compare(COMMAND_EXTRACT) == 0) {
+  if (options.command == COMMAND_SCAN
+      || options.command == COMMAND_COMPRESS
+      || options.command == COMMAND_EXTRACT) {
     cout << "-> Scanning..." << endl << endl;
 
     scanner->run();
@@ -123,7 +128,7 @@ int main(int argc, char *argv[]) {
       << endl;
   }
 
-  if (options.command.compare(COMMAND_EXTRACT) == 0) {
+  if (options.command == COMMAND_EXTRACT) {
     cout << endl << "-> Extract data..." << endl;
 
     ejector = new Eject(options.infile, options.buffer_size);

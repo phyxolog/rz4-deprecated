@@ -1,6 +1,6 @@
 CFLAGS = -std=c++17 -DUNIX -DBIT64 -D_FILE_OFFSET_BITS=64 -m64 -O3 -Wall
 
-BOOST_L = -lboost_system -lboost_filesystem
+BOOST_L = -lboost_system -lboost_filesystem -lboost_program_options
 
 PROG_NAME = build/rz4
 PROG_SRC = src/main.cpp\
