@@ -28,30 +28,7 @@ int usage() {
   return 1;
 }
 
-int main(int argc, char *argv[]) {
-  if (argc < 3) {
-    return usage();
-  }
-
-  // get current path
-  const fs::path workdir = fs::current_path();
-
-  // `command` always the first argument
-  std::string command = argv[1];
-  std::transform(command.begin(), command.end(), command.begin(), ::tolower);
-
-  // init options
-  Options options;
-  options.command = command;
-  options.buffer_size = BUFFER_SIZE;
-  options.enable_wav = 1;
-
-  // input file always the last arg
-  options.infile = argv[argc - 1];
-
-  Scan  *scanner;
-  Eject *ejector;
-
+short int parse_args(Options &options, int argc, char *argv[]) {
   po::options_description desc("");
   desc.add_options()
     ("help,h", "Show help")
@@ -82,6 +59,37 @@ int main(int argc, char *argv[]) {
   }
 
   if (vm.count("help")) {
+    return 1;
+  }
+
+  return 0;
+}
+
+int main(int argc, char *argv[]) {
+  if (argc < 3) {
+    return usage();
+  }
+
+  // get current path
+  const fs::path workdir = fs::current_path();
+
+  // `command` always the first argument
+  std::string command = argv[1];
+  std::transform(command.begin(), command.end(), command.begin(), ::tolower);
+
+  // init options
+  Options options;
+  options.command = command;
+  options.buffer_size = BUFFER_SIZE;
+  options.enable_wav = 1;
+
+  // input file always the last arg
+  options.infile = argv[argc - 1];
+
+  Scan  *scanner;
+  Eject *ejector;
+
+  if (parse_args(options, argc, argv) == 1) {
     return usage();
   }
 
